@@ -20,7 +20,7 @@ jobs:
         id: build_solution
         shell: pwsh
         run: |
-          dotnet build .\CleanArchitecture.sln -c Release
+          dotnet build .\Clean.Architecture.sln -c Release
 
       - name: Run unit tests
         id: run_unit_tests
