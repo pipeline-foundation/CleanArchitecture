@@ -1,0 +1,29 @@
+name: CI/CD Pipeline
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  ci:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+    
+    steps:
+
+      - name: Checkout repository
+        id: checkout_repo
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Build solution
+        id: build_solution
+        shell: pwsh
+        run: |
+          dotnet build .\CleanArchitecture.sln -c Release
+
+      - name: Run unit tests
+        id: run_unit_tests
+        shell: pwsh
+        run: |
+          Get-ChildItem *.Tests*.csproj -recurse | ForEach-Object { dotnet test $PSItem.FullName }
