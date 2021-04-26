@@ -32,4 +32,4 @@ jobs:
         id: run_unit_tests
         shell: pwsh
         run: |
-          Get-ChildItem *Tests*.csproj -recurse | ForEach-Object { dotnet test $PSItem.FullName }
+          dotnet test ./Clean.Architecture.sln --configuration Release
