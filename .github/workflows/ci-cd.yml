@@ -88,7 +88,6 @@ jobs:
     needs: ci
     runs-on: ubuntu-latest
     steps:
-
       - name: Setup dotnet
         id: setup_dotnet
         uses: actions/setup-dotnet@v1
@@ -101,28 +100,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup NuGet
-        uses: nuget/setup-nuget@v1
-        id: setup_nuget
-        with:
-          nuget-version: '5.x'
-
       - name: Create NuGet Package
         id: create_nuget_package
         shell: pwsh
         run: |
-          $gitNewVersion = if ("${{ needs.ci.outputs.latest_version }}") {"${{ needs.ci.outputs.latest_version }}"} else {$null}
-          $projectCurrentVersion = ([xml](Get-Content .\CleanArchitecture.nuspec)).package.metadata.version
-          $projectNewVersion = $gitNewVersion ?? $projectCurrentVersion
-          nuget pack CleanArchitecture.nuspec -OutputDirectory Artifacts -Version $projectNewVersion
+          nuget pack CleanArchitecture.nuspec `
+          -OutputDirectory Artifacts `
+          -Version "${{ needs.ci.outputs.latest_version }}"
 
       - name: Publish to NuGet
         id: publish_to_nuget
         shell: pwsh
         run: |
-          nuget push Ardalis.CleanArchitecture.Template.*.nupkg`
-          nuget setApiKey  ${{secrets.NUGET_API_KEY}}
-          -source https://api.nuget.org/v3/index.json 
+          dotnet nuget push Ardalis.CleanArchitecture.Template."${{ needs.ci.outputs.latest_version }}".nupkg `
+          --source https://api.nuget.org/v3/index.json `
+          --api-key ${{secrets.NUGET_API_KEY}}
 
       - name: Upload artifacts
         id: upload_artifacts
@@ -135,7 +127,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          name: ${{ needs.ci.outputs.latest_version }}
+          name: CleanArchitecture ${{ needs.ci.outputs.latest_version }}
           tag_name: ${{ needs.ci.outputs.latest_version }}
           files: Artifacts/Ardalis.CleanArchitecture.Template.${{ needs.ci.outputs.latest_version }}.nupkg
         env:
