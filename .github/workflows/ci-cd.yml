@@ -74,7 +74,7 @@ jobs:
         id: build_solution
         shell: pwsh
         run: |
-          dotnet build .\Clean.Architecture.sln --configuration Release --output BuildArtifacts
+          dotnet build .\Clean.Architecture.sln --configuration Release --output Artifacts
 
       - name: Run unit tests
         id: run_unit_tests
@@ -82,12 +82,12 @@ jobs:
         run: |
           dotnet test .\Clean.Architecture.sln --configuration Release --no-build
 
-      - name: Upload artifacts from build
-        id: upload_artifacts_from_build
+      - name: Upload artifacts
+        id: upload_artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: BuildArtifacts
-          path: ./BuildArtifacts
+          name: Artifacts
+          path: Artifacts/
 
   cd:
     if: needs.ci.outputs.latest_version != ''
@@ -117,7 +117,7 @@ jobs:
 
       - name: Upload artifacts
         id: upload_artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: Ardalis.CleanArchitecture.Template.${{ needs.ci.outputs.latest_version }}
           path: Artifacts/
