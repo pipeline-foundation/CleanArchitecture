@@ -74,13 +74,20 @@ jobs:
         id: build_solution
         shell: pwsh
         run: |
-          dotnet build .\Clean.Architecture.sln --configuration Release
+          dotnet build .\Clean.Architecture.sln --configuration Release --output BuildArtifacts
 
       - name: Run unit tests
         id: run_unit_tests
         shell: pwsh
         run: |
           dotnet test .\Clean.Architecture.sln --configuration Release --no-build
+
+      - name: Upload artifacts from build
+        id: upload_artifacts_from_build
+        uses: actions/upload-artifact@v2
+        with:
+          name: BuildArtifacts
+          path: ./BuildArtifacts
 
   cd:
     if: needs.ci.outputs.latest_version != ''
