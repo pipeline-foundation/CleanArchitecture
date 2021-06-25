@@ -80,7 +80,7 @@ jobs:
         id: run_unit_tests
         shell: pwsh
         run: |
-          dotnet test .\Clean.Architecture.sln --configuration Release --no-build
+          dotnet test .\Clean.Architecture.sln --configuration Release
 
       - name: Upload artifacts
         id: upload_artifacts
