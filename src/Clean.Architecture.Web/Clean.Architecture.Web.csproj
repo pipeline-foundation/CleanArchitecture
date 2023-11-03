@@ -8,7 +8,6 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <!--<DocumentationFile>bin\swagger-docs.xml</DocumentationFile>-->
   </PropertyGroup>
   
   <ItemGroup>
@@ -21,12 +20,9 @@
     <PackageReference Include="FastEndpoints.Swagger.Swashbuckle" />
     <PackageReference Include="MediatR" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" PrivateAssets="all" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" PrivateAssets="All" />
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" />
     <PackageReference Include="Serilog.AspNetCore" />
-    <!--<PackageReference Include="Swashbuckle.AspNetCore" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" />-->
   </ItemGroup>
   
   <ItemGroup>

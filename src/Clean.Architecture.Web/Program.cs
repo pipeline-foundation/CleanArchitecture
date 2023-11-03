@@ -1,15 +1,13 @@
-﻿using Ardalis.ListStartupServices;
+﻿using Ardalis.GuardClauses;
+using Ardalis.ListStartupServices;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Clean.Architecture.Core;
 using Clean.Architecture.Infrastructure;
 using Clean.Architecture.Infrastructure.Data;
-using Clean.Architecture.Web;
 using FastEndpoints;
 using FastEndpoints.Swagger;
-using FastEndpoints.ApiExplorer;
 using Serilog;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,24 +22,14 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 });
 
 string? connectionString = builder.Configuration.GetConnectionString("SqliteConnection");
-builder.Services.AddDbContext<AppDbContext>(options =>
-          options.UseSqlite(connectionString));
+Guard.Against.Null(connectionString);
+builder.Services.AddApplicationDbContext(connectionString);
 
 builder.Services.AddFastEndpoints();
-//builder.Services.AddFastEndpointsApiExplorer();
 builder.Services.SwaggerDocument(o =>
 {
   o.ShortSchemaNames = true;
 });
-
-//builder.Services.AddSwaggerGen(c =>
-//{
-//  c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-//  c.EnableAnnotations();
-//  string xmlCommentFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "swagger-docs.xml");
-//  c.IncludeXmlComments(xmlCommentFilePath);
-//  c.OperationFilter<FastEndpointsOperationFilter>();
-//});
 
 // add list services for diagnostic purposes - see https://github.com/ardalis/AspNetCoreStartupServices
 builder.Services.Configure<ServiceConfig>(config =>
@@ -76,29 +64,31 @@ app.UseSwaggerGen(); // FastEndpoints middleware
 
 app.UseHttpsRedirection();
 
-// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
-//app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
-
-// Seed Database
-using (var scope = app.Services.CreateScope())
-{
-  var services = scope.ServiceProvider;
-
-  try
-  {
-    var context = services.GetRequiredService<AppDbContext>();
-    //                    context.Database.Migrate();
-    context.Database.EnsureCreated();
-    SeedData.Initialize(services);
-  }
-  catch (Exception ex)
-  {
-    var logger = services.GetRequiredService<ILogger<Program>>();
-    logger.LogError(ex, "An error occurred seeding the DB. {exceptionMessage}", ex.Message);
-  }
-}
+SeedDatabase(app);
 
 app.Run();
+
+static void SeedDatabase(WebApplication app)
+{
+  // Seed Database
+  using (var scope = app.Services.CreateScope())
+  {
+    var services = scope.ServiceProvider;
+
+    try
+    {
+      var context = services.GetRequiredService<AppDbContext>();
+      //                    context.Database.Migrate();
+      context.Database.EnsureCreated();
+      SeedData.Initialize(services);
+    }
+    catch (Exception ex)
+    {
+      var logger = services.GetRequiredService<ILogger<Program>>();
+      logger.LogError(ex, "An error occurred seeding the DB. {exceptionMessage}", ex.Message);
+    }
+  }
+}
 
 // Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
 public partial class Program
