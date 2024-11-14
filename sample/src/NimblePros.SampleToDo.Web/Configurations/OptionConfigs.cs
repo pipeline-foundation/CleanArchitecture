@@ -1,18 +1,17 @@
-﻿using Ardalis.ListStartupServices;
-using Clean.Architecture.Infrastructure.Email;
+﻿using NimblePros.SampleToDo.Infrastructure.Email;
 
-namespace Clean.Architecture.Web.Configurations;
+namespace NimblePros.SampleToDo.Web.Configurations;
 
-public static class OptionConfigs
+public static class OptionConfig
 {
   public static IServiceCollection AddOptionConfigs(this IServiceCollection services,
                                                     IConfiguration configuration,
                                                     Microsoft.Extensions.Logging.ILogger logger,
                                                     WebApplicationBuilder builder)
   {
-    services.Configure<MailserverConfiguration>(configuration.GetSection("Mailserver"))
-    // Configure Web Behavior
-    .Configure<CookiePolicyOptions>(options =>
+    services.Configure<MailserverConfiguration>(configuration.GetSection("Mailserver"));
+
+    services.Configure<CookiePolicyOptions>(options =>
     {
       options.CheckConsentNeeded = context => true;
       options.MinimumSameSitePolicy = SameSiteMode.None;
@@ -21,7 +20,7 @@ public static class OptionConfigs
     if (builder.Environment.IsDevelopment())
     {
       // add list services for diagnostic purposes - see https://github.com/ardalis/AspNetCoreStartupServices
-      services.Configure<ServiceConfig>(config =>
+      services.Configure((Ardalis.ListStartupServices.ServiceConfig config) =>
       {
         config.Services = new List<ServiceDescriptor>(builder.Services);
 
@@ -30,7 +29,7 @@ public static class OptionConfigs
       });
     }
 
-    logger.LogInformation("{Project} were configured", "Options");
+    logger.LogInformation("{Project} were configured", "Configuration and Options");
 
     return services;
   }
