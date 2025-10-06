@@ -9,13 +9,18 @@ public static class OptionConfig
                                                     Microsoft.Extensions.Logging.ILogger logger,
                                                     WebApplicationBuilder builder)
   {
-    services.Configure<MailserverConfiguration>(configuration.GetSection("Mailserver"));
+    services.Configure<MailserverConfiguration>(configuration.GetSection(MailserverConfiguration.SectionName));
+    services.Configure<CachingOptions>(builder.Configuration.GetSection(CachingOptions.SectionName));
 
     services.Configure<CookiePolicyOptions>(options =>
     {
       options.CheckConsentNeeded = context => true;
       options.MinimumSameSitePolicy = SameSiteMode.None;
     });
+
+    // Register global exception handler
+    services.AddExceptionHandler<GlobalExceptionHandler>();
+    services.AddProblemDetails();
 
     if (builder.Environment.IsDevelopment())
     {

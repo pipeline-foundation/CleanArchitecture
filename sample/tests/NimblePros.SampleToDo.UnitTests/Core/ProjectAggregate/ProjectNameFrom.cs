@@ -1,5 +1,5 @@
-﻿using Shouldly;
-using NimblePros.SampleToDo.Core.ProjectAggregate;
+﻿using NimblePros.SampleToDo.Core.ProjectAggregate;
+using Shouldly;
 using Vogen;
 
 namespace NimblePros.SampleToDo.UnitTests.Core.ProjectAggregate;
@@ -9,9 +9,9 @@ public class ProjectNameFrom
   [Theory]
   [InlineData("")]
   [InlineData(null!)]
-  public void ThrowsGivenNullOrEmpty(string name)
+  public void ThrowsGivenNullOrEmpty(string? name)
   {
-    Should.Throw<ValueObjectValidationException>(() => ProjectName.From(name));
+    Should.Throw<ValueObjectValidationException>(() => ProjectName.From(name!));
   }
 
   [Fact]

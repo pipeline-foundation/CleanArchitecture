@@ -1,6 +1,6 @@
-﻿using NimblePros.SampleToDo.Infrastructure;
+﻿using NimblePros.Metronome;
 using NimblePros.SampleToDo.Core;
-using NimblePros.Metronome;
+using NimblePros.SampleToDo.Infrastructure;
 
 namespace NimblePros.SampleToDo.Web.Configurations;
 
@@ -12,7 +12,7 @@ public static class ServiceConfig
   {
     services.AddCoreServices(logger)
             .AddInfrastructureServices(builder.Configuration, logger, builder.Environment.EnvironmentName)
-            .AddMediatrConfigs();
+            .AddMediatorSourceGen();
 
     // add a default http client
     services.AddHttpClient("Default")
