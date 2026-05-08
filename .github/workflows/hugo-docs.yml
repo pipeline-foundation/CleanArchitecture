@@ -33,6 +33,13 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Checkout Hugo Book theme
+        uses: actions/checkout@v4
+        with:
+          repository: alex-shpak/hugo-book
+          path: docs/themes/hugo-book
+          fetch-depth: 1
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
