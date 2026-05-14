@@ -9,7 +9,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
 {
   private MsSqlContainer? _dbContainer;
 
-  public async Task InitializeAsync()
+  public async ValueTask InitializeAsync()
   {
     try
     {
@@ -25,7 +25,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
     }
   }
 
-  public new async Task DisposeAsync()
+  public new async ValueTask DisposeAsync()
   {
     // Clean up environment variable
     Environment.SetEnvironmentVariable("USE_SQL_SERVER", null);
