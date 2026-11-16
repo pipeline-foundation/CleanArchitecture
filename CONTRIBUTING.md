@@ -43,7 +43,7 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 
 ## Contributing to Documentation
 
-The project docs are a [Hugo](https://gohugo.io/) site located in the `/docs` folder and are published to [ardalis.github.io/CleanArchitecture](https://ardalis.github.io/CleanArchitecture/) automatically when changes to `docs/**` are merged to `main`.
+The project docs are a [Hugo](https://gohugo.io/) site located in the `/docs` folder and are published to [cleanarchitecture.ardalis.com](https://cleanarchitecture.ardalis.com/) via [Cloudflare Pages](https://pages.cloudflare.com/) automatically when changes to `docs/**` are merged to `main`. Branches pushed to this repository also get a preview deployment, linked from the Cloudflare check on the pull request. Every pull request that touches `docs/**` (including pull requests from forks) is also built by the **Docs** GitHub Actions workflow, which fails on Hugo errors and broken internal links.
 
 ### Adding or editing a page
 
@@ -63,36 +63,28 @@ Page content here.
 
 To add a **new section** (a collapsible group in the nav), create a subdirectory and add an `_index.md` inside it using the same front matter pattern.
 
-Existing content sections for reference:
-
-| Path | Purpose |
-| --- | --- |
-| `docs/content/getting-started.md` | Installation and first steps |
-| `docs/content/design-decisions.md` | Goals and design rationale |
-| `docs/content/minimal-clean-architecture.md` | Minimal template overview |
-| `docs/content/architecture-decisions/` | ADR records |
-| `docs/content/migration-guides/` | Version upgrade guides |
+Link to other pages with relative Markdown links to the `.md` file (for example `[Versions](versions.md)`). These links work on GitHub too, and the build fails if the target page doesn't exist.
 
 ### Building and previewing docs locally
 
-**Prerequisites:** [Hugo extended](https://gohugo.io/installation/) v0.158 or higher.
+**Prerequisites:** [Hugo](https://gohugo.io/installation/) v0.158 or higher (CI uses 0.169.0) and Git.
 
-1. Clone the theme alongside the docs (mirrors what CI does):
+1. Run the build script once. It fetches the pinned hugo-book theme into `docs/themes/hugo-book` and builds the site into `docs/public/`, the same way Cloudflare Pages does:
 
    ```bash
-   git clone https://github.com/alex-shpak/hugo-book docs/themes/hugo-book
+   bash docs/build.sh
    ```
 
 2. Start the local dev server from the `docs/` directory:
 
    ```bash
    cd docs
-   hugo server --minify
+   hugo server
    ```
 
-3. Open [http://localhost:1313/CleanArchitecture/](http://localhost:1313/CleanArchitecture/) in your browser. The server hot-reloads on file saves.
+3. Open [http://localhost:1313/](http://localhost:1313/) in your browser. The server hot-reloads on file saves.
 
-The generated `docs/public/` output directory is gitignored — do not commit it.
+The theme and the generated `docs/public/` output are gitignored, so don't commit them. See [docs/README.md](https://github.com/ardalis/CleanArchitecture/blob/main/docs/README.md) for Windows instructions, the Cloudflare Pages configuration, and troubleshooting.
 
 ## Sponsor us
 

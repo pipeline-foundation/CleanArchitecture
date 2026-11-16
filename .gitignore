@@ -30,9 +30,6 @@ bld/
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
-# Hugo generated site output
-docs/public/
-
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
@@ -270,10 +267,12 @@ Packages.props
 
 #Local Log Files
 log*.txt
-/sample/src/NimblePros.SampleToDo.Web/appsettings.Development.json
 
 # C# Dev Kit language service cache
 *.lscache
 
 # Personal VS Code workspace settings (launch.json/tasks.json stay shared)
 .vscode/settings.json
+
+# Personal Claude Code settings (shared settings stay in .claude/settings.json)
+.claude/settings.local.json

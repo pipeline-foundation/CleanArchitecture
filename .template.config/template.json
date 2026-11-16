@@ -32,12 +32,23 @@
       "exclude": [ 
         ".vs/**",
         ".vscode/**",
+        ".git",
         ".git/**",
         ".github/**",
         ".idea/**",
         ".template.config/**",
+        ".claude/**",
+        "**/bin/**",
+        "**/obj/**",
+        "**/TestResults/**",
         "docs/**",
-        "sample/**"
+        "MinimalClean/**",
+        "sample/**",
+        "*.nuspec",
+        "README.md",
+        "CODE_OF_CONDUCT.md",
+        "CONTRIBUTING.md",
+        "icon.png"
       ],
       "modifiers": [
         {
